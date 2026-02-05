@@ -16,6 +16,8 @@ origins = [
     "http://localhost:5174",
     "http://localhost:5175",
     "http://localhost:5176",
+    "http://localhost:5177",
+    "https://task-management-system-fa7v.onrender.com",
 ]
 
 app.add_middleware(
