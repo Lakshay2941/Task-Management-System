@@ -128,3 +128,8 @@ def delete_task(task_id: int, db: Session = Depends(get_db), current_user: model
     db.delete(db_task)
     db.commit()
     return {"ok": True}
+
+
+@app.get("/")
+def root():
+    return {"message": "Task Management API is running"}
