@@ -130,6 +130,21 @@ def delete_task(task_id: int, db: Session = Depends(get_db), current_user: model
     return {"ok": True}
 
 
-@app.get("/")
-def root():
-    return {"message": "Task Management API is running"}
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+import os
+
+# Mount the static files directory
+# Ensure 'frontend/dist' exists relative to the root where this script is run
+# The script is likely run from root as `uvicorn backend.main:app`
+# So frontend/dist is correct relative to root.
+app.mount("/assets", StaticFiles(directory="frontend/dist/assets"), name="assets")
+
+@app.get("/{full_path:path}")
+async def serve_react_app(full_path: str):
+    # Check if the file exists in the build directory (e.g., favicon.ico)
+    file_path = f"frontend/dist/{full_path}"
+    if os.path.isfile(file_path):
+        return FileResponse(file_path)
+    # Otherwise, return the index.html for client-side routing
+    return FileResponse("frontend/dist/index.html")
